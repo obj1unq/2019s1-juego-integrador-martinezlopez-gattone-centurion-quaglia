@@ -1,0 +1,118 @@
+import wollok.game.*
+
+class ObjetoEnPantalla {
+	var property posicion
+	
+	method agregarAPantalla() {
+		game.addVisual(self)
+	}
+	
+	method quitarDePantalla() {
+		game.removeVisual(self)
+	}
+}
+
+//el nombre no esta fijo
+object mapaOsystem {
+	const property camino //Contiene una lista con las posiciones de los caminos
+	/**
+	 *
+	 * Esta propiedad decidi ponerla luego de pensar las diferentes formas de recorrer el camino
+	 * para hacer avanzar a las unidades y pense que esta seria la mas sensilla
+	 *
+	 **/ 
+	var property torres = [] //Contiene una lista con todas las torres
+	//La idea es tener una lista con todas las torres para poder hacer que ataquen al final del turno
+	
+	method agregar(torre) {
+		torres.add(torre)
+	}
+	method quitar(torre) {
+		torres.remove(torre)
+	} 
+}
+
+object jugador {
+	var property oro
+	var property hp
+	
+	method ganarOro(cant) {
+		oro += cant
+	}
+	
+	method perderOro(cant) {
+		oro -= cant
+	}
+	
+	method aumentarHp(cant) {
+		hp += cant
+	}
+	
+	method perderHp(cant) {
+		hp -= cant	
+	}
+}
+
+class Torre inherits ObjetoEnPantalla {
+	const property atk
+	const property range
+	const property pierce
+	const property cost
+	
+	method atacar() {
+	/**
+	 *
+	 * ataca a tantos enemigos como diga la variable pierce
+	 * busca a los mas lejanos dentro del rango
+	 *
+	 **/
+	}
+	
+	method vender() {
+		/**
+		 *
+		 * sale de pantalla y devuelve una parte de su costo
+		 *
+		 */
+	}
+	
+	method construir() {
+		/**
+		 *
+		 * entra en pantalla y reduce su costo del oro del jugador 
+		 * (solo puede hacerse si jugador tiene al menos la misma cantidad de oro) 
+		 *
+		 */
+	}
+}
+
+class Enemy inherits ObjetoEnPantalla {
+	const property atk
+	var property   vida
+	const property recompenza
+	const property speed
+	
+	method atacar() {
+		/**
+		 *
+		 * Sale de pantalla y reduce la hp del jugador segun su atk
+		 *
+		**/
+	}
+	
+	method morir() {
+		/**
+		 *
+		 * Sale de pantalla y le da oro al jugador segun su recompenza
+		 *
+		 */
+	}
+	
+	method avanzar() {
+		/**
+		 *
+		 * Avanza tantos casilleros del camino como diga su velocidad
+		 *
+		 */
+	}
+}
