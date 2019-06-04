@@ -14,7 +14,7 @@ class ObjetoEnPantalla {
 
 //el nombre no esta fijo
 object mapaOsystem {
-	const property camino //Contiene una lista con las posiciones de los caminos
+	const property camino = [] //Contiene una lista con las posiciones de los caminos
 	/**
 	 *
 	 * Esta propiedad decidi ponerla luego de pensar las diferentes formas de recorrer el camino

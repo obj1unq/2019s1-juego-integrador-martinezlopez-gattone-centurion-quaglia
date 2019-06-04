@@ -1,6 +1,6 @@
-
+import wollok.game.*
 program main {
 
-	
+	game.title("Tower Defense ReCrazy")
 
 }

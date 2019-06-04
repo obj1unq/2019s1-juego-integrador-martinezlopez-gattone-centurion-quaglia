@@ -2,6 +2,6 @@ import wollok.game.*
 
 program abc {
 
-	console.println()
+	console.println("Hay que hacer algo aca")
 
 }
