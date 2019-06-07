@@ -13,7 +13,7 @@ class ObjetoEnPantalla {
 }
 
 //el nombre no esta fijo
-object mapaOsystem {
+object system {
 	const property camino = [] //Contiene una lista con las posiciones de los caminos
 	/**
 	 *
@@ -53,59 +53,80 @@ object jugador {
 	}
 }
 
+object cabezal inherits ObjetoEnPantalla{
+	
+	override method agregarAPantalla() {
+		game.addVisualCharacter(self)
+	}
+	
+	method sePuedeConstruir() {
+		return true
+	}
+}
+
 class Torre inherits ObjetoEnPantalla {
 	const property atk
 	const property range
 	const property pierce
 	const property cost
 	
+	const property player = jugador
+	const property sistem = system
+	const property cabe = cabezal
+	
 	method atacar() {
-	/**
-	 *
-	 * ataca a tantos enemigos como diga la variable pierce
-	 * busca a los mas lejanos dentro del rango
-	 *
-	 **/
+		
 	}
 	
 	method vender() {
-		/**
-		 *
-		 * sale de pantalla y devuelve una parte de su costo
-		 *
-		 */
+		player.ganarOro(cost/3)
+		self.quitarDePantalla()
+		sistem.quitar(self)
 	}
 	
 	method construir() {
-		/**
-		 *
-		 * entra en pantalla y reduce su costo del oro del jugador 
-		 * (solo puede hacerse si jugador tiene al menos la misma cantidad de oro) 
-		 *
-		 */
+		if (cost <= player.oro() && cabe.sePuedeConstruir()) {
+			player.perderOro(cost)
+			self.posicion(cabe.posicion())
+			sistem.agregar(self)
+			self.agregarAPantalla()
+		}
 	}
 }
 
 class Enemy inherits ObjetoEnPantalla {
 	const property atk
-	var property   vida
+	const property maxHp
+	var   property vida
 	const property recompenza
 	const property speed
 	
+	const property player = jugador
+	
 	method atacar() {
-		/**
-		 *
-		 * Sale de pantalla y reduce la hp del jugador segun su atk
-		 *
-		**/
+		player.perderHp(atk)
+		self.quitarDePantalla()
 	}
 	
 	method morir() {
-		/**
-		 *
-		 * Sale de pantalla y le da oro al jugador segun su recompenza
-		 *
-		 */
+		player.ganarOro(recompenza)
+		self.quitarDePantalla()
+	}
+	
+	method perderVida(cant) {
+		if (cant >= vida) {
+			self.morir()
+		} else {
+			vida -= cant
+		}
+	}
+	
+	method ganarVida(cant) { //hice este metodo por si nos pinta hacer unidades enemigas que puedan curar
+		if (vida+cant >= maxHp) {
+			vida = maxHp
+		} else {
+			vida += cant
+		}
 	}
 	
 	method avanzar() {
