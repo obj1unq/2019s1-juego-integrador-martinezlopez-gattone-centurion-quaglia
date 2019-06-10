@@ -116,7 +116,7 @@ class TorreLenta inherits ObjetoEnPantalla{//esta torre tiene mucho daño pero p
 		return 1
 	}
 	method atacar() {
-		//cada x (x es mayor que el tiempo de las demas torres) segundos dispara
+		//cada x (x es mayor que el tiempo de las demas torres) segundos disparaa
 	}
 	
 	method vender() {
