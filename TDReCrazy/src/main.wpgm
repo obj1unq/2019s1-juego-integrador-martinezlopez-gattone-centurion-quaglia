@@ -1,6 +1,10 @@
 import wollok.game.*
+import ObjetosBase.*
 program main {
 
 	game.title("Tower Defense ReCrazy")
-
+	keyboard.space().onPressDo( { system.nextTurn() } )
+	keyboard.t().onPressDo( { 
+		keyboard.enter().onPressDo( { system.torreLenta().construir() } )
+	} )
 }
