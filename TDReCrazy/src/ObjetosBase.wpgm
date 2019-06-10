@@ -93,6 +93,48 @@ class Torre inherits ObjetoEnPantalla {
 		}
 	}
 }
+class Mina inherits Torre{ 
+    override method atacar(){
+    	//cuando un enemigo colisione con la mina se activa, habria que usar el whenColliderDo no?
+    	self.desaparecerDelMapa()
+    }
+    method desaparecerDelMapa(){
+    	self.quitarDePantalla()
+    }
+}
+class TorreLenta inherits ObjetoEnPantalla{//esta torre tiene mucho daño pero puede lanzar un disparo cada cierto tiempo 
+	const property range
+	const property cost
+	
+	const property player = jugador
+	const property sistem = system
+	const property cabe = cabezal
+	method atk(){
+		return 9999
+	}
+	method pierce(){
+		return 1
+	}
+	method atacar() {
+		//cada x segundos dispara(x es mayor que el tiempo de las demas torres)
+	}
+	
+	method vender() {
+		player.ganarOro(cost/3)
+		self.quitarDePantalla()
+		sistem.quitar(self)
+	}
+	
+	method construir() {
+		if (cost <= player.oro() && cabe.sePuedeConstruir()) {
+			player.perderOro(cost)
+			self.posicion(cabe.posicion())
+			sistem.agregar(self)
+			self.agregarAPantalla()
+		}
+	}
+}
+
 
 class Enemy inherits ObjetoEnPantalla {
 	const property atk
