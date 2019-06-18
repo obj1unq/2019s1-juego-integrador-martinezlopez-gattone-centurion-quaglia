@@ -22,7 +22,7 @@ object system {
 	/**
 	 *
 	 * Esta propiedad decidi ponerla luego de pensar las diferentes formas de recorrer el camino
-	 * para hacer avanzar a las unidades y pense que esta seria la mas sensilla
+	 * para hacer avanzar a las unidades y pense que esta seria la mas sencilla
 	 *
 	 **/ 
 	var property torres = [] //Contiene una lista con todas las torres
@@ -36,12 +36,15 @@ object system {
 	}
 	
 	method torreLenta() {
-		return new Torre(atk = 9999, range = 3, pierce = 1, cost = 100)
+		return new Torre(atk = 9999, range = 3, pierce = 1, cost = 200)
 	}
 	
-	//method construirTorreRapida() {
-	//	new Torre(atk = 9, range = 3, pierce = 5, cost = 100)
-	//}
+	method torreRapida() {
+		return new Torre(atk = 9, range = 3, pierce = 5, cost = 180)
+	}
+	method torreNormal(){
+		return new Torre(atk = 15, range= 3, pierce= 6, cost=100 )
+	}
 	
 	method distanciaALaMeta() {
 		return camino.size()
@@ -86,7 +89,10 @@ object cabezal inherits ObjetoEnPantalla {
 	}
 	
 	method sePuedeConstruir() {
-		return true
+	      return game.getObjectsIn(self.posicion()==[])
+	}
+	method move(nuevaPosicion){
+		self.posicion(nuevaPosicion)
 	}
 }
 
@@ -157,7 +163,36 @@ class Torre inherits ObjetoEnPantalla {
 }
 
 class Mina inherits ObjetoEnPantalla { 
-    //TODO: finish this shit
+    const property atk = 0
+	const property pierce = 9999
+	const property cost = 0
+	
+	const property player = jugador
+	const property sistem = system
+	const property cabe = cabezal
+	
+	
+	
+	method explotar() {
+		var enemigos=game.getObjectsIn (self.posicion())
+		enemigos.forEach({enemigo=>enemigo.perderVida(atk)})
+		self.quitarDePantalla()
+	}
+	
+	method vender() {
+		player.ganarOro(cost/3)
+		self.quitarDePantalla()
+		sistem.quitar(self)
+	}
+	
+	method construir() {
+		if (cost <= player.oro() && cabe.sePuedeConstruir()) {
+			player.perderOro(cost)
+			self.posicion(cabe.posicion())
+			sistem.agregar(self)
+			self.agregarAPantalla()
+		}
+	}
 }
 
 
@@ -197,7 +232,7 @@ class Enemy inherits ObjetoEnPantalla {
 			vida += cant
 		}
 	}
-	
+
 	method avanzar() {
 		if ((pos+speed) >= sistem.distanciaALaMeta()) {
 			self.atacar()
