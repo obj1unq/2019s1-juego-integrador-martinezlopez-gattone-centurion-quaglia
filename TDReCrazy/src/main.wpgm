@@ -6,11 +6,12 @@ program main {
 	game.width(10)
 	game.ground("")//falta elegir las imagenes
 	game.title("Tower Defense ReCrazy")
+	cabezal.agregarAPantalla()
 	//movimiento del cabezal/////////////////////////
-	keyboard.up().onPressDo { cabezal.move(cabezal.posicion().up(1)) }
-	keyboard.down().onPressDo { cabezal.move(cabezal.posicion().down(1)) }
-	keyboard.left().onPressDo { cabezal.move(cabezal.posicion().left(1)) }
-	keyboard.right().onPressDo { cabezal.move(cabezal.posicion().right(1)) }
+	keyboard.up().onPressDo { cabezal.move(cabezal.position().up(1)) }
+	keyboard.down().onPressDo { cabezal.move(cabezal.position().down(1)) }
+	keyboard.left().onPressDo { cabezal.move(cabezal.position().left(1)) }
+	keyboard.right().onPressDo { cabezal.move(cabezal.position().right(1)) }
 	///////////teclas para jugar/////////////////
 	keyboard.space().onPressDo( { system.nextTurn() } )
 	keyboard.t().onPressDo( { 
@@ -24,7 +25,7 @@ program main {
 	} )
 	
 	/////////////////////Colison//////////
-   // game.whenCollideDo(Mina,{enemigo=>Mina.explotar()})
+   // game.whenCollideDo(Mina, { enemigo=>Mina.explotar() } )
     
     
     game.start()

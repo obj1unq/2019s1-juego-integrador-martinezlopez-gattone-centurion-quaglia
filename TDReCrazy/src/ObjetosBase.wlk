@@ -1,7 +1,7 @@
 import wollok.game.*
 
 class ObjetoEnPantalla {
-	var property posicion = game.at(0,0)
+	var property position = game.at(0,0)
 	
 	method agregarAPantalla() {
 		game.addVisual(self)
@@ -28,6 +28,9 @@ object system {
 	var property torres = [] //Contiene una lista con todas las torres
 	//La idea es tener una lista con todas las torres para poder hacer que ataquen al final del turno
 	
+	var property enemigos = [] //Contiene una lista con todos los enemigos en pantalla
+	//Misma idea que con la lista de torres, poder recorrer cada enemigo y decirle que avance
+	
 	method agregar(torre) {
 		torres.add(torre)
 	}
@@ -36,14 +39,14 @@ object system {
 	}
 	
 	method torreLenta() {
-		return new Torre(atk = 9999, range = 3, pierce = 1, cost = 200)
+		return new Torre(atk = 15, range = 5, pierce = 1, cost = 100)
 	}
 	
 	method torreRapida() {
-		return new Torre(atk = 9, range = 3, pierce = 5, cost = 180)
+		return new Torre(atk = 5, range = 3, pierce = 6, cost = 180)
 	}
-	method torreNormal(){
-		return new Torre(atk = 15, range= 3, pierce= 6, cost=100 )
+	method torreNormal() {
+		return new Torre(atk = 10, range= 3, pierce= 3, cost= 200)
 	}
 	
 	method distanciaALaMeta() {
@@ -51,10 +54,21 @@ object system {
 	}
 	
 	method getPathIn(position) {
-		return game.getObjectsIn(position)
+		return game.getObjectsIn(position).filter( { obj => obj.esCamino() } )
 	}
 	
-	method nextTurn() {}
+	method nextTurn() {
+		self.avanzarTodos()
+		self.atacarTodas()
+	}
+	
+	method avanzarTodos() {
+		enemigos.forEach( { enemigo => enemigo.avanzar() } )
+	}
+	
+	method atacarTodas() {
+		torres.forEach( { torre => torre.atacar() } )
+	}
 }
 
 object jugador {
@@ -89,48 +103,50 @@ object cabezal inherits ObjetoEnPantalla {
 	}
 	
 	method sePuedeConstruir() {
-	      return game.getObjectsIn(self.posicion()==[])
+	      return game.getObjectsIn(self.position()) == []
 	}
-	method move(nuevaPosicion){
-		self.posicion(nuevaPosicion)
+	
+	method move(nuevaPosicion) {
+		self.position(nuevaPosicion)
 	}
 }
 
 class Torre inherits ObjetoEnPantalla {
-	const property atk = 0
-	const property range = 0
-	const property pierce = 0
-	const property cost = 0
-	const property pathInRange = []
+	const property atk
+	const property range
+	const property pierce
+	const property cost
+	var   property pathInRange = #{}
 	
 	const property player = jugador
 	const property sistem = system
 	const property cabe = cabezal
 	
 	method setPathInRange() {
-		var pos = posicion
+		var pos = position
 		pathInRange.add(sistem.getPathIn(pos.down(1)))
 		pathInRange.add(sistem.getPathIn(pos.right(1)))
 		pathInRange.add(sistem.getPathIn(pos.left(1)))		
 		pathInRange.add(sistem.getPathIn(pos.up(1)))				
 		new Range(1, range - 1).forEach( { i =>
-			pos = posicion.up(i)
+			pos = position.up(i)
 			pathInRange.add(sistem.getPathIn(pos.up(1)) )
 			pathInRange.add(sistem.getPathIn(pos.right(1)))
 			pathInRange.add(sistem.getPathIn(pos.left(1)))
-			pos = posicion.down(i)
+			pos = position.down(i)
 			pathInRange.add(sistem.getPathIn(pos.down(1)))
 			pathInRange.add(sistem.getPathIn(pos.left(1)))
 			pathInRange.add(sistem.getPathIn(pos.right(1)))		
-			pos = posicion.left(i)
+			pos = position.left(i)
 			pathInRange.add(sistem.getPathIn(pos.left(1)))
 			pathInRange.add(sistem.getPathIn(pos.down(1)))
 			pathInRange.add(sistem.getPathIn(pos.up(1)))		
-			pos = posicion.right(i)
+			pos = position.right(i)
 			pathInRange.add(sistem.getPathIn(pos.right(1)))
 			pathInRange.add(sistem.getPathIn(pos.up(1)))
 			pathInRange.add(sistem.getPathIn(pos.down(1)))		
 		} )
+		self.pathInRange(pathInRange.flatten())
 	}
 	
 	method atacar() {
@@ -155,7 +171,7 @@ class Torre inherits ObjetoEnPantalla {
 	method construir() {
 		if (cost <= player.oro() && cabe.sePuedeConstruir()) {
 			player.perderOro(cost)
-			self.posicion(cabe.posicion())
+			self.position(cabe.position())
 			sistem.agregar(self)
 			self.agregarAPantalla()
 		}
@@ -163,9 +179,8 @@ class Torre inherits ObjetoEnPantalla {
 }
 
 class Mina inherits ObjetoEnPantalla { 
-    const property atk = 0
-	const property pierce = 9999
-	const property cost = 0
+    const property atk = 20
+	const property cost = 150
 	
 	const property player = jugador
 	const property sistem = system
@@ -174,8 +189,8 @@ class Mina inherits ObjetoEnPantalla {
 	
 	
 	method explotar() {
-		var enemigos=game.getObjectsIn (self.posicion())
-		enemigos.forEach({enemigo=>enemigo.perderVida(atk)})
+		var enemigos = game.getObjectsIn (self.position())
+		enemigos.forEach( { enemigo => enemigo.perderVida(atk) } )
 		self.quitarDePantalla()
 	}
 	
@@ -188,7 +203,7 @@ class Mina inherits ObjetoEnPantalla {
 	method construir() {
 		if (cost <= player.oro() && cabe.sePuedeConstruir()) {
 			player.perderOro(cost)
-			self.posicion(cabe.posicion())
+			self.position(cabe.position())
 			sistem.agregar(self)
 			self.agregarAPantalla()
 		}
@@ -234,11 +249,18 @@ class Enemy inherits ObjetoEnPantalla {
 	}
 
 	method avanzar() {
-		if ((pos+speed) >= sistem.distanciaALaMeta()) {
-			self.atacar()
-		} else {
-			self.posicion(sistem.camino().find(pos+speed))
-			//modificar en versiones posteriores
-		}
+		var range = [1..speed]
+		range.forEach( {
+			if((pos+1) >= sistem.distanciaALaMeta()) { self.atacar() } 
+			else { self.position(sistem.camino().find(pos+1)) }
+		} )
+		
+		
+		//if ((pos+speed) >= sistem.distanciaALaMeta()) {
+		//	self.atacar()
+		//} else {
+		//	self.position(sistem.camino().find(pos+speed))
+		//	//modificar en versiones posteriores
+		//}
 	}
 }
