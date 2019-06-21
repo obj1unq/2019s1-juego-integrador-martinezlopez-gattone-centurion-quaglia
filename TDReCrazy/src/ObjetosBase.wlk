@@ -34,8 +34,17 @@ object system {
 	method agregar(torre) {
 		torres.add(torre)
 	}
+	
 	method quitar(torre) {
 		torres.remove(torre)
+	}
+	
+	method agregarE(enemigo) {
+		enemigos.add(enemigo)
+	}
+	
+	method quitarE(enemigo) {
+		enemigos.remove(enemigo)
 	}
 	
 	method torreLenta() {
@@ -111,12 +120,31 @@ object cabezal inherits ObjetoEnPantalla {
 	}
 }
 
+object first {
+	method getPriority(e1, e2) {
+		return e1.pos() > e2.pos()
+	}
+}
+
+object last {
+	method getPriority(e1, e2) {
+		return e1.pos() < e2.pos()
+	}
+}
+
+object strong {
+	method getPriority(e1, e2) {
+		return e1.vida() > e2.vida()
+	}
+}
+
 class Torre inherits ObjetoEnPantalla {
 	const property atk
 	const property range
 	const property pierce
 	const property cost
 	var   property pathInRange = #{}
+	var   property priority    = first
 	
 	const property player = jugador
 	const property sistem = system
@@ -155,7 +183,7 @@ class Torre inherits ObjetoEnPantalla {
 		enemiesInRange.forEach( { enemiesInPath => 
 			enemiesInPath.forEach( { enemy => allEnemies.add(enemy) } )
 		} )	
-		allEnemies.sortBy( { e1, e2 => e1.pos() > e2.pos() } )
+		allEnemies.sortBy( { e1, e2 => priority.getPriority(e1, e2) } )
 		var maxPierce = pierce.min(allEnemies.size())
 		new Range(1, maxPierce).forEach( { i =>
 			allEnemies.get(i).perderVida(atk)
@@ -174,6 +202,14 @@ class Torre inherits ObjetoEnPantalla {
 			self.position(cabe.position())
 			sistem.agregar(self)
 			self.agregarAPantalla()
+		}
+	}
+	
+	method cambiarPrioridad() {
+		if (priority == first) { priority = last } 
+		else { 
+			if (priority == last) { priority = strong }
+			else { priority = first }
 		}
 	}
 }
@@ -222,14 +258,21 @@ class Enemy inherits ObjetoEnPantalla {
 	const property player = jugador
 	const property sistem = system
 	
+	method engendrar() {
+		self.agregarAPantalla()
+		sistem.agregarE(self)
+	}
+	
 	method atacar() {
 		player.perderHp(atk)
 		self.quitarDePantalla()
+		sistem.quitarE(self)
 	}
 	
 	method morir() {
 		player.ganarOro(recompenza)
 		self.quitarDePantalla()
+		sistem.quitarE(self)
 	}
 	
 	method perderVida(cant) {

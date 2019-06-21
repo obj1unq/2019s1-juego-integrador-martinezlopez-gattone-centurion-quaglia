@@ -24,8 +24,9 @@ program main {
 		keyboard.enter().onPressDo( { system.torreNormal().construir() } )
 	} )
 	
+	game.whenCollideDo(cabezal, { torre => keyboard.enter().onPressDo( { torre.cambiarPrioridad() } ) })
 	/////////////////////Colison//////////
-   // game.whenCollideDo(Mina, { enemigo=>Mina.explotar() } )
+   // game.whenCollideDo(Mina, { enemigo => Mina.explotar() } )
     
     
     game.start()
