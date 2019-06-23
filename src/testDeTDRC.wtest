@@ -1,0 +1,28 @@
+import wollok.game.*
+import sistema.*
+import torres.*
+import enemigos.*
+
+
+test "test1" {
+
+	const c1 = new Camino(position = game.at(0,0))
+	const c2 = new Camino(position = game.at(0,1))
+	const c3 = new Camino(position = game.at(0,2))
+	const c4 = new Camino(position = game.at(1,2))
+	const c5 = new Camino(position = game.at(1,3))
+	const c6 = new Camino(position = game.at(1,4))
+	const c7 = new Camino(position = game.at(2,4))
+	const torre = new Torre(position = game.at(2,1), atk = 10, range= 2, pierce= 3, cost= 200)
+	c1.agregarAPantalla()
+	c2.agregarAPantalla()
+	c3.agregarAPantalla()
+	c4.agregarAPantalla()
+	c5.agregarAPantalla()
+	c6.agregarAPantalla()
+	c7.agregarAPantalla()
+	torre.agregarAPantalla()
+	torre.setPathInRange()
+	assert.equals(#{c4, c2}, torre.pathInRange())
+
+}

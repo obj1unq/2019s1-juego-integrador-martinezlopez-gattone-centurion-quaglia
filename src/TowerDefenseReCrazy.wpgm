@@ -1,0 +1,54 @@
+import wollok.game.*
+import sistema.*
+import torres.*
+import enemigos.*
+
+program main {
+	
+	//Mapa del juego
+	
+	game.title("Tower Defense ReCrazy")
+    game.height(10)
+	game.width(10)
+	game.ground("fondo.png")//falta elegir las imagenes
+	
+	//Agregados a pantalla
+	
+	const c1 = new Camino(position = game.at(0,0))
+	const c2 = new Camino(position = game.at(0,1))
+	const c3 = new Camino(position = game.at(0,2))
+	const c4 = new Camino(position = game.at(1,2))
+	const c5 = new Camino(position = game.at(1,3))
+	const c6 = new Camino(position = game.at(1,4))
+	const c7 = new Camino(position = game.at(2,4))
+	cabezal.agregarAPantalla()
+	game.addVisual(jugador)
+	c1.agregarAPantalla()
+	c2.agregarAPantalla()
+	c3.agregarAPantalla()
+	c4.agregarAPantalla()
+	c5.agregarAPantalla()
+	c6.agregarAPantalla()
+	c7.agregarAPantalla()
+	
+	//Movimiento del cabezal
+	
+	keyboard.up().onPressDo { cabezal.move(cabezal.position().up(1)) }
+	keyboard.down().onPressDo { cabezal.move(cabezal.position().down(1)) }
+	keyboard.left().onPressDo { cabezal.move(cabezal.position().left(1)) }
+	keyboard.right().onPressDo { cabezal.move(cabezal.position().right(1)) }
+	
+	//Teclas para jugar
+
+	keyboard.space().onPressDo( { system.nextTurn() } )
+	keyboard.t().onPressDo( { keyboard.enter().onPressDo( { system.torreLenta().construir() } ) } )
+	keyboard.r().onPressDo( { keyboard.enter().onPressDo( { system.torreRapida().construir() } ) } )
+	keyboard.n().onPressDo( { keyboard.enter().onPressDo( { system.torreNormal().construir() } ) } )
+	
+	game.whenCollideDo(cabezal, { torre => keyboard.enter().onPressDo( { torre.cambiarPrioridad() } ) })
+	/////////////////////Colison//////////
+   // game.whenCollideDo(Mina, { enemigo => Mina.explotar() } )
+    
+    
+    game.start()
+}

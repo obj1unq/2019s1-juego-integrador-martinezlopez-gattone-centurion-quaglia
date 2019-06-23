@@ -4,7 +4,7 @@ program main {
 	///////////mapa del juego//////////////////////////////
     game.height(10)
 	game.width(10)
-	game.ground("")//falta elegir las imagenes
+	game.ground("fondo1.png")//falta elegir las imagenes
 	game.title("Tower Defense ReCrazy")
 	cabezal.agregarAPantalla()
 	//movimiento del cabezal/////////////////////////
