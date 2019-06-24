@@ -18,7 +18,7 @@ class ObjetoEnPantalla {
 
 //el nombre no esta fijo
 object system {
-	const property camino = [] //Contiene una lista con las posiciones de los caminos
+	var property camino = [] //Contiene una lista con las posiciones de los caminos
 	/**
 	 *
 	 * Esta propiedad decidi ponerla luego de pensar las diferentes formas de recorrer el camino
@@ -30,6 +30,8 @@ object system {
 	
 	var property enemigos = [] //Contiene una lista con todos los enemigos en pantalla
 	//Misma idea que con la lista de torres, poder recorrer cada enemigo y decirle que avance
+	
+	var property turn = 0
 	
 	method agregarT(torre) {
 		torres.add(torre)
@@ -48,19 +50,39 @@ object system {
 	}
 	
 	method torreLenta() { //a.k.a La torre ballesta.
-		return new TorreBallesta (atk = 15, range = 5, pierce = 1, cost = 100)
+		return new TorreBallesta (atk = 45, range = 4, pierce = 1, cost = 100)
 	}
 	
 	method torreRapida() { //a.k.a La torre gatling. Es obvio.
-		return new TorreGatling (atk = 5, range = 2, pierce = 6, cost = 180)
+		return new TorreGatling (atk = 15, range = 2, pierce = 6, cost = 180)
 	}
 	
 	method torreNormal() { //El cañonaso.
-		return new TorreCanion (atk = 7, range= 3, pierce= 3, cost = 150)
+		return new TorreCanion (atk = 21, range= 3, pierce= 3, cost = 150)
 	}
 	
 	method torreBomba() { //Boom.
-		return new TorreBomba (atk = 10, range = 1, pierce = 8, cost = 120)
+		return new TorreBomba (atk = 30, range = 2, pierce = 8, cost = 260)
+	}
+	
+	method inutilDeLaEspada() {
+		return new Incredibilis (atk = 5, vida = 50, recompenza = 80, speed = 2)
+	}
+	
+	method inutilDelHacha() {
+		return new Raider (atk = 15, vida = 125, recompenza = 120, speed = 1)
+	}
+	
+	method inutilQueCorre() {
+		return new Alien (atk = 10, vida = 30, recompenza = 120, speed = 4)
+	}
+	
+	method inutilQueBufea() {
+		return new Curandero (atk = 2, vida = 75, recompenza = 60, speed = 2)
+	}
+	
+	method shovelKnight() {
+		return new ShovelKnight (atk = 5, vida = 500, recompenza = 2000, speed = 1)
 	}
 	
 	method distanciaALaMeta() {
@@ -72,8 +94,23 @@ object system {
 	}
 	
 	method nextTurn() {
+		turn = turn + 1
 		self.avanzarTodos()
 		self.atacarTodas()
+		self.spawnWave()
+	}
+	
+	method spawnWave() {
+		var waveToSpawn = []
+		if (turn == 1) {
+			5.times( { n => waveToSpawn.add(self.inutilDeLaEspada()) } )
+		}
+		if (turn == 5) {
+			3.times( { n => waveToSpawn.add(self.inutilDeLaEspada()) } )
+			2.times( { n => waveToSpawn.add(self.inutilDelHacha()) } )
+			3.times( { n => waveToSpawn.add(self.inutilDeLaEspada()) } )
+		}
+		waveToSpawn.forEach( { enemy => enemy.engendrar() } )
 	}
 	
 	method avanzarTodos() {
@@ -86,10 +123,10 @@ object system {
 }
 
 object jugador {
-	var property oro
-	var property hp
+	var property oro = 200
+	var property hp  = 100
 	
-	method position() = game.at(4,9)
+	method position() = game.at(7,8)
 	
 	method image() = "player.png"
 	
@@ -108,6 +145,10 @@ object jugador {
 	method perderHp(cant) {
 		hp -= cant	
 	}
+	
+	method esCamino() {
+		return false
+	}
 }
 
 class Camino inherits ObjetoEnPantalla {
@@ -125,7 +166,7 @@ object cabezal inherits ObjetoEnPantalla {
 	method image() = "cabezal1.png"
 	
 	method sePuedeConstruir() {
-	      return game.getObjectsIn(self.position()) == []
+	      return game.colliders(self) == []
 	}
 	
 	method move(nuevaPosicion) {

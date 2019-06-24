@@ -3,7 +3,6 @@ import wollok.game.*
 
 class Enemy inherits ObjetoEnPantalla {
 	const property atk
-	const property maxHp
 	var   property vida
 	const property recompenza
 	const property speed
@@ -37,28 +36,30 @@ class Enemy inherits ObjetoEnPantalla {
 		}
 	}
 	
-	method ganarVida(cant) { //hice este metodo por si nos pinta hacer unidades enemigas que puedan curar
-		if (vida+cant >= maxHp) {
-			vida = maxHp
-		} else {
-			vida += cant
-		}
-	}
+	//method ganarVida(cant) { //hice este metodo por si nos pinta hacer unidades enemigas que puedan curar
+	//	if (vida+cant >= maxHp) {
+	//		vida = maxHp
+	//	} else {
+	//		vida += cant
+	//	}
+	//}
 
 	method avanzar() {
-		var range = [1..speed]
-		range.forEach( {
+		new Range(1, speed).forEach( { n =>
 			if((pos+1) >= sistem.distanciaALaMeta()) { self.atacar() } 
-			else { self.position(sistem.camino().find(pos+1)) }
+			else { 
+				self.position(sistem.camino().get(pos+1).position())
+				pos = pos + 1
+			}
 		} )
 		
 		
-		//if ((pos+speed) >= sistem.distanciaALaMeta()) {
-		//	self.atacar()
-		//} else {
-		//	self.position(sistem.camino().find(pos+speed))
-		//	//modificar en versiones posteriores
-		//}
+//		if ((pos+speed) >= sistem.distanciaALaMeta()) {
+//			self.atacar()
+//		} else {
+//			self.position(sistem.camino().get(pos+speed))
+//			//modificar en versiones posteriores
+//		}
 	}
 }
 
@@ -82,7 +83,7 @@ class Curandero inherits Enemy {
 	method image() = "enemigo4.png"
 }
 
-class Tanque inherits Enemy {
+class ShovelKnight inherits Enemy {
 	//Unidad de asalto pesado, lento en avance pero tiene mucho aguanta y un gran poder de ataque.
 	method image() = "enemigo5.png"
 }

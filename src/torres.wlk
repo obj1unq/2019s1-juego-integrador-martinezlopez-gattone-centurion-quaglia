@@ -13,58 +13,59 @@ class Torre inherits ObjetoEnPantalla {
 	const property sistem = system
 	const property cabe = cabezal
 	
-	method setPathInRange() {
-		var pos = position
-		pathInRange.add(sistem.getPathIn(pos.down(1)))
-		pathInRange.add(sistem.getPathIn(pos.right(1)))
-		pathInRange.add(sistem.getPathIn(pos.left(1)))		
-		pathInRange.add(sistem.getPathIn(pos.up(1)))				
+	method setPathInRange(path, posicion) {
+		var pos = posicion
+		path.add(sistem.getPathIn(pos.down(1)))
+		path.add(sistem.getPathIn(pos.right(1)))
+		path.add(sistem.getPathIn(pos.left(1)))		
+		path.add(sistem.getPathIn(pos.up(1)))				
 		new Range(1, range - 1).forEach( { i =>
 			pos = position.up(i)
-			pathInRange.add(sistem.getPathIn(pos.up(1)) )
-			pathInRange.add(sistem.getPathIn(pos.right(1)))
-			pathInRange.add(sistem.getPathIn(pos.left(1)))
+			path.add(sistem.getPathIn(pos.up(1)) )
+			path.add(sistem.getPathIn(pos.right(1)))
+			path.add(sistem.getPathIn(pos.left(1)))
 			pos = position.down(i)
-			pathInRange.add(sistem.getPathIn(pos.down(1)))
-			pathInRange.add(sistem.getPathIn(pos.left(1)))
-			pathInRange.add(sistem.getPathIn(pos.right(1)))		
+			path.add(sistem.getPathIn(pos.down(1)))
+			path.add(sistem.getPathIn(pos.left(1)))
+			path.add(sistem.getPathIn(pos.right(1)))		
 			pos = position.left(i)
-			pathInRange.add(sistem.getPathIn(pos.left(1)))
-			pathInRange.add(sistem.getPathIn(pos.down(1)))
-			pathInRange.add(sistem.getPathIn(pos.up(1)))		
+			path.add(sistem.getPathIn(pos.left(1)))
+			path.add(sistem.getPathIn(pos.down(1)))
+			path.add(sistem.getPathIn(pos.up(1)))		
 			pos = position.right(i)
-			pathInRange.add(sistem.getPathIn(pos.right(1)))
-			pathInRange.add(sistem.getPathIn(pos.up(1)))
-			pathInRange.add(sistem.getPathIn(pos.down(1)))		
+			path.add(sistem.getPathIn(pos.right(1)))
+			path.add(sistem.getPathIn(pos.up(1)))
+			path.add(sistem.getPathIn(pos.down(1)))		
 		} )
-		self.pathInRange(pathInRange.flatten())
+	}
+	
+	method orderEnemies(enemies) {
+		var enemiesInRange = pathInRange.map( { camino => game.colliders(camino) } )
+		enemiesInRange.forEach( { enemiesInPath => 
+			enemiesInPath.forEach( { enemy => enemies.add(enemy) } )
+		} )	
+		return enemies.sortedBy( { e1, e2 => priority.getPriority(e1, e2) } )
 	}
 	
 	method atacar() {
 		var allEnemies = []
-		var enemiesInRange = pathInRange.map( { camino => game.colliders(camino) } )
-		enemiesInRange.forEach( { enemiesInPath => 
-			enemiesInPath.forEach( { enemy => allEnemies.add(enemy) } )
-		} )	
-		allEnemies.sortBy( { e1, e2 => priority.getPriority(e1, e2) } )
-		var maxPierce = pierce.min(allEnemies.size())
-		new Range(1, maxPierce).forEach( { i =>
-			allEnemies.get(i).perderVida(atk)
-		} )
+		self.orderEnemies(allEnemies).take(pierce).forEach( { enemigo => enemigo.perderVida(atk) } )
 	}
 	
 	method vender() {
 		player.ganarOro(cost/3)
 		self.quitarDePantalla()
-		sistem.quitar(self)
+		sistem.quitarT(self)
 	}
 	
 	method construir() {
 		if (cost <= player.oro() && cabe.sePuedeConstruir()) {
 			player.perderOro(cost)
 			self.position(cabe.position())
-			sistem.agregar(self)
+			sistem.agregarT(self)
 			self.agregarAPantalla()
+			self.setPathInRange(pathInRange, position)
+			self.pathInRange(pathInRange.flatten())
 		}
 	}
 	
@@ -90,12 +91,32 @@ class TorreShock inherits Torre {
 
 class TorreBallesta inherits Torre {
 	//Te hunde el pecho. LITERAL.
-	method image () = "torreBallesta.png"
+	method image () = "torreBallesta.jpg"
 }
 
 class TorreBomba inherits Torre {
+	var property pathInAoE = #{}
+	var property aoeRange  = 2
 	//La hacemos explotar al colocarse o como lo hacemos?
 	method image () = "torreBomba.png"
+	
+	override method atacar() {
+		var allEnemies = []
+		if (not self.orderEnemies(allEnemies).isEmpty()) {
+			var aoe = self.getAoE(self.orderEnemies(allEnemies).head())
+			aoe.forEach( { enemigo => enemigo.perderVida(atk)  } )
+		}
+	}
+	
+	method getAoE(enemy) {
+		self.setPathInRange(pathInAoE, enemy.position())
+		self.pathInAoE(pathInAoE.flatten())
+		var enemiesInRange = pathInAoE.map( { camino => game.colliders(camino) } )
+		enemiesInRange.forEach( { enemiesInPath => 
+			enemiesInPath.forEach( { enemie => enemiesInRange.add(enemie) } )
+		} )	
+		return enemiesInRange
+	}
 }
 
 class TorreGatling inherits Torre {
