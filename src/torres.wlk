@@ -91,7 +91,7 @@ class TorreShock inherits Torre {
 
 class TorreBallesta inherits Torre {
 	//Te hunde el pecho. LITERAL.
-	method image () = "torreBallesta.jpg"
+	method image () = "torreBallesta.png"
 }
 
 class TorreBomba inherits Torre {
