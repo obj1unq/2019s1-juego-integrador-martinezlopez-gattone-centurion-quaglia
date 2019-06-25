@@ -2,14 +2,12 @@ import sistema.*
 import wollok.game.*
 
 class Torre inherits ObjetoEnPantalla {
+	var   property pathInRange = #{}
 	const property atk
 	const property range
 	const property pierce
 	const property cost
-	var   property pathInRange = #{}
 	var   property priority    = first
-	
-	const property cabe = cabezal
 	
 	method setPathInRange(path, posicion) {
 		var pos = posicion
@@ -57,9 +55,9 @@ class Torre inherits ObjetoEnPantalla {
 	}
 	
 	method construir() {
-		if (cost <= jugador.oro() && cabe.sePuedeConstruir()) {
+		if (cost <= jugador.oro() && cabezal.sePuedeConstruir()) {
 			jugador.perderOro(cost)
-			self.position(cabe.position())
+			self.position(cabezal.position())
 			system.agregarT(self)
 			self.agregarAPantalla()
 			self.setPathInRange(pathInRange, position)
@@ -127,8 +125,6 @@ class Mina inherits ObjetoEnPantalla {
     const property atk = 30
 	const property cost = 60
 	
-	const property cabe = cabezal
-	
 	method image() = "mina.png"
 	
 	method explotar() {
@@ -143,9 +139,9 @@ class Mina inherits ObjetoEnPantalla {
 	}
 	
 	method construir() {
-		if (cost <= jugador.oro() && cabe.sePuedeConstruirM()) {
+		if (cost <= jugador.oro() && cabezal.sePuedeConstruirM()) {
 			jugador.perderOro(cost)
-			self.position(cabe.position())
+			self.position(cabezal.position())
 			self.agregarAPantalla()
 		}
 	}

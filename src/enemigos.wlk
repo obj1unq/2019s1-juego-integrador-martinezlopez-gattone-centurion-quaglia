@@ -43,21 +43,21 @@ class Enemy inherits ObjetoEnPantalla {
 	//}
 
 	method avanzar() {
-		new Range(1, speed).forEach( { n => 
-			if((pos+1) >= system.distanciaALaMeta()) { self.atacar() } 
-			else { 
-				self.position(system.camino().get(pos+1).position())
-				pos = pos + 1
-			}
-		} )
+		//new Range(1, speed).forEach( { n => 
+			//if((pos+1) >= system.distanciaALaMeta()) { self.atacar() } 
+			//else { 
+				//self.position(system.camino().get(pos+1).position())
+				//pos = pos + 1
+			//}
+		//} )
 		
 		
-//		if ((pos+speed) >= sistem.distanciaALaMeta()) {
-//			self.atacar()
-//		} else {
-//			self.position(sistem.camino().get(pos+speed))
-//			//modificar en versiones posteriores
-//		}
+		if ((pos+speed) >= system.distanciaALaMeta()) {
+			self.atacar()
+		} else {
+			self.position(system.camino().get(pos+speed).position())
+			pos = pos + speed
+		} 
 	}
 }
 
