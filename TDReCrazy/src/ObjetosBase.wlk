@@ -69,6 +69,7 @@ object system {
 	method nextTurn() {
 		self.avanzarTodos()
 		self.atacarTodas()
+		//falta el sistema de oleadas
 	}
 	
 	method avanzarTodos() {

@@ -125,23 +125,23 @@ object system {
 			5.times( { n => waveToSpawn.add(self.inutilDeLaEspada()) } )
 		}
 		if (turn == 18) {
-			3.times( { n => waveToSpawn.add(self.inutilQueCorre()) } )
-			2.times( { n => waveToSpawn.add(self.inutilDelHacha()) } )
+			5.times( { n => waveToSpawn.add(self.inutilQueCorre()) } )
+			3.times( { n => waveToSpawn.add(self.inutilDelHacha()) } )
 		}
 		if (turn == 20) {
 			1.times( { n => waveToSpawn.add(self.shovelKnight()) } )
-			1.times( { n => waveToSpawn.add(self.inutilQueBufea()) } )
+			2.times( { n => waveToSpawn.add(self.inutilQueBufea()) } )
 		}
 		if (turn == 22) {
-			5.times( { n => waveToSpawn.add(self.inutilDeLaEspada()) } )
+			7.times( { n => waveToSpawn.add(self.inutilDeLaEspada()) } )
 			3.times( { n => waveToSpawn.add(self.inutilQueCorre()) } )
 		}
 		if (turn == 26) {
-			2.times( { n => waveToSpawn.add(self.inutilDeLaEspada()) } )
+			3.times( { n => waveToSpawn.add(self.inutilDeLaEspada()) } )
 			6.times( { n => waveToSpawn.add(self.inutilQueCorre()) } )
 		}
 		if (turn == 30) {
-			3.times( { n => waveToSpawn.add(self.inutilDeLaEspada()) } )
+			15.times( { n => waveToSpawn.add(self.inutilDeLaEspada()) } )
 		}
 		waveToSpawn.forEach( { enemy => enemy.engendrar() } )
 	}
@@ -156,7 +156,7 @@ object system {
 }
 
 object jugador {
-	var property oro = 200
+	var property oro = 500
 	var property hp  = 100
 	
 	method position() = game.at(7,8)
@@ -200,6 +200,10 @@ object cabezal inherits ObjetoEnPantalla {
 	
 	method sePuedeConstruir() {
 	      return game.colliders(self) == []
+	}
+	
+	method sePuedeConstruirM() {
+	      return not game.colliders(self).filter( { obj => obj.esCamino() } ) == []
 	}
 	
 	method move(nuevaPosicion) {

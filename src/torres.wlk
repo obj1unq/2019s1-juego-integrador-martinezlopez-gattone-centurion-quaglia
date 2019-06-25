@@ -147,7 +147,7 @@ class Mina inherits ObjetoEnPantalla {
 	}
 	
 	method construir() {
-		if (cost <= player.oro() && cabe.sePuedeConstruir()) {
+		if (cost <= player.oro() && cabe.sePuedeConstruirM()) {
 			player.perderOro(cost)
 			self.position(cabe.position())
 			self.agregarAPantalla()
