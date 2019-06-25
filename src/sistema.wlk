@@ -107,14 +107,14 @@ object system {
 	method spawnWave() {
 		var waveToSpawn = []
 		if (turn == 1) {
-			5.times( { n => waveToSpawn.add(self.inutilDeLaEspada()) } )
+			2.times( { n => waveToSpawn.add(self.inutilDeLaEspada()) } )
 		}
-		if (turn == 5) {
+		if (turn == 565) {
 			3.times( { n => waveToSpawn.add(self.inutilDeLaEspada()) } )
 			2.times( { n => waveToSpawn.add(self.inutilDelHacha()) } )
 			3.times( { n => waveToSpawn.add(self.inutilDeLaEspada()) } )
 		}
-		if (turn == 10) {
+		if (turn == 510) {
 			2.times( { n => waveToSpawn.add(self.inutilDeLaEspada()) } )
 			4.times( { n => waveToSpawn.add(self.inutilQueCorre()) } )
 			3.times( { n => waveToSpawn.add(self.inutilDelHacha()) } )

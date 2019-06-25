@@ -8,24 +8,22 @@ class Enemy inherits ObjetoEnPantalla {
 	const property speed
 	
 	var   property pos    = 0
-	const property player = jugador
-	const property sistem = system
 	
 	method engendrar() {
 		self.agregarAPantalla()
-		sistem.agregarE(self)
+		system.agregarE(self)
 	}
 	
 	method atacar() {
-		player.perderHp(atk)
+		jugador.perderHp(atk)
 		self.quitarDePantalla()
-		sistem.quitarE(self)
+		system.quitarE(self)
 	}
 	
 	method morir() {
-		player.ganarOro(recompenza)
+		jugador.ganarOro(recompenza)
 		self.quitarDePantalla()
-		sistem.quitarE(self)
+		system.quitarE(self)
 	}
 	
 	method perderVida(cant) {
@@ -46,9 +44,9 @@ class Enemy inherits ObjetoEnPantalla {
 
 	method avanzar() {
 		new Range(1, speed).forEach( { n => 
-			if((pos+1) >= sistem.distanciaALaMeta()) { self.atacar() } 
+			if((pos+1) >= system.distanciaALaMeta()) { self.atacar() } 
 			else { 
-				self.position(sistem.camino().get(pos+1).position())
+				self.position(system.camino().get(pos+1).position())
 				pos = pos + 1
 			}
 		} )

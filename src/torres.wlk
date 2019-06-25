@@ -9,33 +9,31 @@ class Torre inherits ObjetoEnPantalla {
 	var   property pathInRange = #{}
 	var   property priority    = first
 	
-	const property player = jugador
-	const property sistem = system
 	const property cabe = cabezal
 	
 	method setPathInRange(path, posicion) {
 		var pos = posicion
-		path.add(sistem.getPathIn(pos.down(1)))
-		path.add(sistem.getPathIn(pos.right(1)))
-		path.add(sistem.getPathIn(pos.left(1)))		
-		path.add(sistem.getPathIn(pos.up(1)))				
+		path.add(system.getPathIn(pos.down(1)))
+		path.add(system.getPathIn(pos.right(1)))
+		path.add(system.getPathIn(pos.left(1)))		
+		path.add(system.getPathIn(pos.up(1)))				
 		new Range(1, range - 1).forEach( { i =>
 			pos = position.up(i)
-			path.add(sistem.getPathIn(pos.up(1)) )
-			path.add(sistem.getPathIn(pos.right(1)))
-			path.add(sistem.getPathIn(pos.left(1)))
+			path.add(system.getPathIn(pos.up(1)) )
+			path.add(system.getPathIn(pos.right(1)))
+			path.add(system.getPathIn(pos.left(1)))
 			pos = position.down(i)
-			path.add(sistem.getPathIn(pos.down(1)))
-			path.add(sistem.getPathIn(pos.left(1)))
-			path.add(sistem.getPathIn(pos.right(1)))		
+			path.add(system.getPathIn(pos.down(1)))
+			path.add(system.getPathIn(pos.left(1)))
+			path.add(system.getPathIn(pos.right(1)))		
 			pos = position.left(i)
-			path.add(sistem.getPathIn(pos.left(1)))
-			path.add(sistem.getPathIn(pos.down(1)))
-			path.add(sistem.getPathIn(pos.up(1)))		
+			path.add(system.getPathIn(pos.left(1)))
+			path.add(system.getPathIn(pos.down(1)))
+			path.add(system.getPathIn(pos.up(1)))		
 			pos = position.right(i)
-			path.add(sistem.getPathIn(pos.right(1)))
-			path.add(sistem.getPathIn(pos.up(1)))
-			path.add(sistem.getPathIn(pos.down(1)))		
+			path.add(system.getPathIn(pos.right(1)))
+			path.add(system.getPathIn(pos.up(1)))
+			path.add(system.getPathIn(pos.down(1)))		
 		} )
 	}
 	
@@ -53,16 +51,16 @@ class Torre inherits ObjetoEnPantalla {
 	}
 	
 	method vender() {
-		player.ganarOro(cost/3)
+		jugador.ganarOro(cost/3)
 		self.quitarDePantalla()
-		sistem.quitarT(self)
+		system.quitarT(self)
 	}
 	
 	method construir() {
-		if (cost <= player.oro() && cabe.sePuedeConstruir()) {
-			player.perderOro(cost)
+		if (cost <= jugador.oro() && cabe.sePuedeConstruir()) {
+			jugador.perderOro(cost)
 			self.position(cabe.position())
-			sistem.agregarT(self)
+			system.agregarT(self)
 			self.agregarAPantalla()
 			self.setPathInRange(pathInRange, position)
 			self.pathInRange(pathInRange.flatten())
@@ -102,8 +100,9 @@ class TorreBomba inherits Torre {
 	
 	override method atacar() {
 		var allEnemies = []
+		var aoe
 		if (not self.orderEnemies(allEnemies).isEmpty()) {
-			var aoe = self.getAoE(self.orderEnemies(allEnemies).head())
+			aoe = self.getAoE(self.orderEnemies(allEnemies).head())
 			aoe.forEach( { enemigo => enemigo.perderVida(atk)  } )
 		}
 	}
@@ -128,8 +127,6 @@ class Mina inherits ObjetoEnPantalla {
     const property atk = 30
 	const property cost = 60
 	
-	const property player = jugador
-	const property sistem = system
 	const property cabe = cabezal
 	
 	method image() = "mina.png"
@@ -141,14 +138,13 @@ class Mina inherits ObjetoEnPantalla {
 	}
 	
 	method vender() {
-		player.ganarOro(cost/3)
+		jugador.ganarOro(cost/3)
 		self.quitarDePantalla()
-		sistem.quitar(self)
 	}
 	
 	method construir() {
-		if (cost <= player.oro() && cabe.sePuedeConstruirM()) {
-			player.perderOro(cost)
+		if (cost <= jugador.oro() && cabe.sePuedeConstruirM()) {
+			jugador.perderOro(cost)
 			self.position(cabe.position())
 			self.agregarAPantalla()
 		}
