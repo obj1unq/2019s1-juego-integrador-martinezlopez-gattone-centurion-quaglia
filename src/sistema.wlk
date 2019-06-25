@@ -65,6 +65,10 @@ object system {
 		return new TorreBomba (atk = 30, range = 2, pierce = 8, cost = 260)
 	}
 	
+	method mina() {
+		return new Mina()
+	}
+	
 	method inutilDeLaEspada() {
 		return new Incredibilis (atk = 5, vida = 50, recompenza = 80, speed = 2)
 	}
@@ -108,6 +112,35 @@ object system {
 		if (turn == 5) {
 			3.times( { n => waveToSpawn.add(self.inutilDeLaEspada()) } )
 			2.times( { n => waveToSpawn.add(self.inutilDelHacha()) } )
+			3.times( { n => waveToSpawn.add(self.inutilDeLaEspada()) } )
+		}
+		if (turn == 10) {
+			2.times( { n => waveToSpawn.add(self.inutilDeLaEspada()) } )
+			4.times( { n => waveToSpawn.add(self.inutilQueCorre()) } )
+			3.times( { n => waveToSpawn.add(self.inutilDelHacha()) } )
+			1.times( { n => waveToSpawn.add(self.inutilQueBufea()) } )
+		}
+		if (turn == 14) {
+			5.times( { n => waveToSpawn.add(self.inutilDelHacha()) } )
+			5.times( { n => waveToSpawn.add(self.inutilDeLaEspada()) } )
+		}
+		if (turn == 18) {
+			3.times( { n => waveToSpawn.add(self.inutilQueCorre()) } )
+			2.times( { n => waveToSpawn.add(self.inutilDelHacha()) } )
+		}
+		if (turn == 20) {
+			1.times( { n => waveToSpawn.add(self.shovelKnight()) } )
+			1.times( { n => waveToSpawn.add(self.inutilQueBufea()) } )
+		}
+		if (turn == 22) {
+			5.times( { n => waveToSpawn.add(self.inutilDeLaEspada()) } )
+			3.times( { n => waveToSpawn.add(self.inutilQueCorre()) } )
+		}
+		if (turn == 26) {
+			2.times( { n => waveToSpawn.add(self.inutilDeLaEspada()) } )
+			6.times( { n => waveToSpawn.add(self.inutilQueCorre()) } )
+		}
+		if (turn == 30) {
 			3.times( { n => waveToSpawn.add(self.inutilDeLaEspada()) } )
 		}
 		waveToSpawn.forEach( { enemy => enemy.engendrar() } )

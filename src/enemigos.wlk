@@ -45,7 +45,7 @@ class Enemy inherits ObjetoEnPantalla {
 	//}
 
 	method avanzar() {
-		new Range(1, speed).forEach( { n =>
+		new Range(1, speed).forEach( { n => 
 			if((pos+1) >= sistem.distanciaALaMeta()) { self.atacar() } 
 			else { 
 				self.position(sistem.camino().get(pos+1).position())

@@ -125,8 +125,8 @@ class TorreGatling inherits Torre {
 }
 
 class Mina inherits ObjetoEnPantalla { 
-    const property atk = 20
-	const property cost = 150
+    const property atk = 30
+	const property cost = 60
 	
 	const property player = jugador
 	const property sistem = system
@@ -150,7 +150,6 @@ class Mina inherits ObjetoEnPantalla {
 		if (cost <= player.oro() && cabe.sePuedeConstruir()) {
 			player.perderOro(cost)
 			self.position(cabe.position())
-			sistem.agregar(self)
 			self.agregarAPantalla()
 		}
 	}
