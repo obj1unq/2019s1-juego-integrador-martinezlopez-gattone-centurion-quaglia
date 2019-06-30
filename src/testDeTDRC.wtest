@@ -73,3 +73,11 @@ test "test2" {
 	system.nextTurn()
 	assert.equals( [], system.enemigos())
 }
+
+test "test3" {
+	const torre = new Torre(position = game.at(2,1), atk = 10, range= 2, pierce= 99, cost= 200)
+	cabezal.agregarAPantalla()
+	torre.construir()
+	torre.vender()
+	assert.that(true)
+}
