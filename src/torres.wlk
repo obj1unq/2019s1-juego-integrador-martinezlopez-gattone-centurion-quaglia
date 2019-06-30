@@ -2,41 +2,43 @@ import sistema.*
 import wollok.game.*
 
 class Torre inherits ObjetoEnPantalla {
-	var   property pathInRange = #{}
+	
 	const property atk
 	const property range
 	const property pierce
 	const property cost
 	var   property priority    = first
 	
-	method setPathInRange(path, posicion) {
+	method setPathInRange(posicion) {
+		var ret = #{}
 		var pos = posicion
-		path.add(system.getPathIn(pos.down(1)))
-		path.add(system.getPathIn(pos.right(1)))
-		path.add(system.getPathIn(pos.left(1)))		
-		path.add(system.getPathIn(pos.up(1)))				
+		ret.add(system.getPathIn(pos.down(1)))
+		ret.add(system.getPathIn(pos.right(1)))
+		ret.add(system.getPathIn(pos.left(1)))		
+		ret.add(system.getPathIn(pos.up(1)))				
 		new Range(1, range - 1).forEach( { i =>
 			pos = position.up(i)
-			path.add(system.getPathIn(pos.up(1)) )
-			path.add(system.getPathIn(pos.right(1)))
-			path.add(system.getPathIn(pos.left(1)))
+			ret.add(system.getPathIn(pos.up(1)) )
+			ret.add(system.getPathIn(pos.right(1)))
+			ret.add(system.getPathIn(pos.left(1)))
 			pos = position.down(i)
-			path.add(system.getPathIn(pos.down(1)))
-			path.add(system.getPathIn(pos.left(1)))
-			path.add(system.getPathIn(pos.right(1)))		
+			ret.add(system.getPathIn(pos.down(1)))
+			ret.add(system.getPathIn(pos.left(1)))
+			ret.add(system.getPathIn(pos.right(1)))		
 			pos = position.left(i)
-			path.add(system.getPathIn(pos.left(1)))
-			path.add(system.getPathIn(pos.down(1)))
-			path.add(system.getPathIn(pos.up(1)))		
+			ret.add(system.getPathIn(pos.left(1)))
+			ret.add(system.getPathIn(pos.down(1)))
+			ret.add(system.getPathIn(pos.up(1)))		
 			pos = position.right(i)
-			path.add(system.getPathIn(pos.right(1)))
-			path.add(system.getPathIn(pos.up(1)))
-			path.add(system.getPathIn(pos.down(1)))		
+			ret.add(system.getPathIn(pos.right(1)))
+			ret.add(system.getPathIn(pos.up(1)))
+			ret.add(system.getPathIn(pos.down(1)))		
 		} )
+		return ret.flatten()
 	}
 	
 	method orderEnemies(enemies) {
-		var enemiesInRange = pathInRange.map( { camino => game.colliders(camino) } )
+		var enemiesInRange = self.setPathInRange(position).map( { camino => game.colliders(camino) } )
 		enemiesInRange.forEach( { enemiesInPath => 
 			enemiesInPath.forEach( { enemy => enemies.add(enemy) } )
 		} )	
@@ -60,8 +62,6 @@ class Torre inherits ObjetoEnPantalla {
 			self.position(cabezal.position())
 			system.agregarT(self)
 			self.agregarAPantalla()
-			self.setPathInRange(pathInRange, position)
-			self.pathInRange(pathInRange.flatten())
 		}
 	}
 	
@@ -72,6 +72,8 @@ class Torre inherits ObjetoEnPantalla {
 			else { priority = first }
 		}
 	}
+	
+	override method esTorre() = true
 }
 
 class TorreCanion inherits Torre {
@@ -91,28 +93,25 @@ class TorreBallesta inherits Torre {
 }
 
 class TorreBomba inherits Torre {
-	var property pathInAoE = #{}
 	var property aoeRange  = 2
 	//La hacemos explotar al colocarse o como lo hacemos?
 	method image () = "torreBomba.png"
 	
 	override method atacar() {
-		var allEnemies = []
-		var aoe
-		if (not self.orderEnemies(allEnemies).isEmpty()) {
-			aoe = self.getAoE(self.orderEnemies(allEnemies).head())
+		var allEnemies = self.orderEnemies([])
+		if (not allEnemies.isEmpty()) {
+			var aoe = self.getAoE(allEnemies.head())
 			aoe.forEach( { enemigo => enemigo.perderVida(atk)  } )
 		}
 	}
 	
 	method getAoE(enemy) {
-		self.setPathInRange(pathInAoE, enemy.position())
-		self.pathInAoE(pathInAoE.flatten())
-		var enemiesInRange = pathInAoE.map( { camino => game.colliders(camino) } )
+		var ret = []
+		var enemiesInRange = self.setPathInRange(enemy.position()).map( { camino => game.colliders(camino) } )
 		enemiesInRange.forEach( { enemiesInPath => 
-			enemiesInPath.forEach( { enemie => enemiesInRange.add(enemie) } )
+			enemiesInPath.forEach( { enemie => ret.add(enemie) } )
 		} )	
-		return enemiesInRange
+		return ret
 	}
 }
 

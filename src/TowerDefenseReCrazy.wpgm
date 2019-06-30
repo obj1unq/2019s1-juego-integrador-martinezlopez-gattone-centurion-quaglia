@@ -60,11 +60,11 @@ program main {
 	keyboard.t().onPressDo( { system.torreLenta().construir() } )
 	keyboard.r().onPressDo( { system.torreRapida().construir() } )
 	keyboard.n().onPressDo( { system.torreNormal().construir() } ) 
-	//keyboard.b().onPressDo( { system.torreBomba().construir() } ) 
+	keyboard.b().onPressDo( { system.torreBomba().construir() } ) 
 	keyboard.m().onPressDo( { system.mina().construir() } )
 	
-	game.whenCollideDo(cabezal, { torre => keyboard.i().onPressDo( { torre.cambiarPrioridad() } ) })
-	game.whenCollideDo(cabezal, { torre => keyboard.v().onPressDo( { torre.vender() } ) })
+	game.whenCollideDo(cabezal, { torre => keyboard.i().onPressDo( { if (torre.esTorre()) { torre.cambiarPrioridad() } } ) })
+	game.whenCollideDo(cabezal, { torre => keyboard.v().onPressDo( { if (torre.esTorre()) { torre.vender() } } ) })
 	/////////////////////Colision//////////
 	//game.whenCollideDo(mina, { enemigo => mina.explotar() } )
 	

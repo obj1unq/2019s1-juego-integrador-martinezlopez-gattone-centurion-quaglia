@@ -14,6 +14,8 @@ class ObjetoEnPantalla {
 	}
 	
 	method esCamino() = false
+	
+	method esTorre() = false
 }
 
 //el nombre no esta fijo
@@ -32,6 +34,8 @@ object system {
 	//Misma idea que con la lista de torres, poder recorrer cada enemigo y decirle que avance
 	
 	var property turn = 0
+	
+	var property partidaContinua = true
 	
 	method agregarT(torre) {
 		torres.add(torre)
@@ -99,9 +103,11 @@ object system {
 	
 	method nextTurn() {
 		turn = turn + 1
-		self.avanzarTodos()
-		self.atacarTodas()
-		self.spawnWave()
+		if (partidaContinua) {
+			self.avanzarTodos()
+			self.atacarTodas()
+			self.spawnWave()
+		}
 	}
 	
 	method spawnWave() {
@@ -109,12 +115,12 @@ object system {
 		if (turn == 1) {
 			2.times( { n => waveToSpawn.add(self.inutilDeLaEspada()) } )
 		}
-		if (turn == 565) {
+		if (turn == 5) {
 			3.times( { n => waveToSpawn.add(self.inutilDeLaEspada()) } )
 			2.times( { n => waveToSpawn.add(self.inutilDelHacha()) } )
 			3.times( { n => waveToSpawn.add(self.inutilDeLaEspada()) } )
 		}
-		if (turn == 510) {
+		if (turn == 10) {
 			2.times( { n => waveToSpawn.add(self.inutilDeLaEspada()) } )
 			4.times( { n => waveToSpawn.add(self.inutilQueCorre()) } )
 			3.times( { n => waveToSpawn.add(self.inutilDelHacha()) } )
@@ -153,6 +159,28 @@ object system {
 	method atacarTodas() {
 		torres.forEach( { torre => torre.atacar() } )
 	}
+	
+	method ganar() {
+		partidaContinua = false
+		pantallaDeVictoria.agregarAPantalla()
+	}
+	
+	method perder() {
+		partidaContinua = false
+		pantallaDeDerrota.agregarAPantalla()
+	}
+}
+
+object pantallaDeDerrota inherits ObjetoEnPantalla {
+	
+	method image() = 0 //TODO: conseguir imagen
+	
+}
+
+object pantallaDeVictoria inherits ObjetoEnPantalla {
+	
+	method image() = 0 //TODO: conseguir imagen
+	
 }
 
 object jugador {
