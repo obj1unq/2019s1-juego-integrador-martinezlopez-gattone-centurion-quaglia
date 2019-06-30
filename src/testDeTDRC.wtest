@@ -29,7 +29,6 @@ test "test1" {
 	e2.engendrar()
 	torre.construir()
 	assert.equals(#{c4, c2}, torre.pathInRange())
-	torre.atacar()
 }
 
 test "test2" {
