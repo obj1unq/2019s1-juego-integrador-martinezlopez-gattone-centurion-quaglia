@@ -119,7 +119,7 @@ object jugador {
 	
 	method position() = game.at(8,9)
 	
-	method image() = "player.png"
+	method image() = "Player.png"
 	
 	method ganarOro(cant) {
 		oro += cant
