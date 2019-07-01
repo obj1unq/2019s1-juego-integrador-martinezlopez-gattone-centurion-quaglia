@@ -2,12 +2,17 @@ import sistema.*
 import wollok.game.*
 import camino.*
 
+class Bug {
+	var torre
+}
+
 class Torre inherits ObjetoEnPantalla {
 	
 	const property atk
 	const property range
 	const property pierce
 	const property cost
+	const property bug = new Bug(torre = 0)
 	var   property priority    = first
 	
 	method setPathInRange(posicion) {
@@ -125,13 +130,17 @@ class Mina inherits ObjetoEnPantalla {
 	
 	method explotar() {
 		var enemigos = game.colliders(self).filter( { obj => not obj.esCamino() } )
+		if (not enemigos.isEmpty()) {
 		enemigos.forEach( { enemigo => enemigo.perderVida(atk) } )
 		self.quitarDePantalla()
+		system.quitarM(self)
+		}
 	}
 	
 	method vender() {
 		jugador.ganarOro(cost/3)
 		self.quitarDePantalla()
+		system.quitarM(self)
 	}
 	
 	method construir() {
@@ -139,6 +148,7 @@ class Mina inherits ObjetoEnPantalla {
 			jugador.perderOro(cost)
 			self.position(cabezal.position())
 			self.agregarAPantalla()
+			system.agregarM(self)
 		}
 	}
 }

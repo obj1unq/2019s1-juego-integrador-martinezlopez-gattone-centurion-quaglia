@@ -16,8 +16,8 @@ class Enemy inherits ObjetoEnPantalla {
 	}
 	
 	method atacar() {
-		jugador.perderHp(atk)
 		self.quitarDePantalla()
+		jugador.perderHp(atk)
 		system.quitarE(self)
 	}
 	
@@ -117,6 +117,10 @@ class DeusVult inherits Enemy {
 				self.ganarVida(50)
 			} )
 		}
+	}
+	
+	override method morir(){
+		system.ganar()
 	}
 }
 

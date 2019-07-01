@@ -35,11 +35,21 @@ object system {
 	var property enemigos = [] //Contiene una lista con todos los enemigos en pantalla
 	//Misma idea que con la lista de torres, poder recorrer cada enemigo y decirle que avance
 	
+	var property minas = []
+	
 	var property turn = 0
 	
 	var property partidaContinua = true
 	
 	method nivelActual() = nivel1
+	
+	method agregarM(mina) {
+		minas.add(mina)
+	}
+	
+	method quitarM(mina) {
+		minas.remove(mina)
+	}
 	
 	method agregarT(torre) {
 		torres.add(torre)
@@ -82,12 +92,18 @@ object system {
 		torres.forEach( { torre => torre.atacar() } )
 	}
 	
+	method explotarTodas() {
+		minas.forEach( { mina => mina.explotar() } )
+	}
+	
 	method ganar() {
+		game.clear()
 		partidaContinua = false
 		pantallaDeVictoria.agregarAPantalla()
 	}
 	
 	method perder() {
+		game.clear()
 		partidaContinua = false
 		pantallaDeDerrota.agregarAPantalla()
 	}
@@ -124,7 +140,11 @@ object jugador {
 	}
 	
 	method perderHp(cant) {
-		hp -= cant	
+		if (hp -cant <= 0) {
+			system.perder()
+		} else { 
+			hp -= cant
+		}
 	}
 	
 	method esCamino() {
