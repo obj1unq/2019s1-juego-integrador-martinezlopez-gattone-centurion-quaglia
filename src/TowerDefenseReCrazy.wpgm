@@ -13,7 +13,7 @@ program main {
     game.height(11)
 	game.width(11)
 	nivel1.crear()
-	//Movimiento del cabezal
+	//Movimiento del cabezal..
 	
 	keyboard.up().onPressDo { cabezal.move(cabezal.position().up(1)) }
 	keyboard.down().onPressDo { cabezal.move(cabezal.position().down(1)) }
