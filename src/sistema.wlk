@@ -39,7 +39,7 @@ object system {
 	
 	var property partidaContinua = true
 	
-	var property niveles = [nivel1, nivel2]
+	var property niveles = [nivel1, nivel2, nivel3]
 	
 	method nivelActual() = niveles.first()
 	
@@ -69,7 +69,7 @@ object system {
 	
 	method nextTurn() {
 		turn = turn + 1
-		if (partidaContinua and turn == 38) {
+		if (partidaContinua and turn == nivelActual.limite()) {
 			self.pasarDeNivel()
 		} else {
 			self.avanzarTodos()
@@ -87,8 +87,7 @@ object system {
 	}
 	method pasarDeNivel() {
 			niveles.remove(niveles.first())
-			turn = 0
-			nivel2.crear()
+			self.nivelActual().crear()
 	}
 	
 	method ganar() {

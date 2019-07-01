@@ -123,6 +123,10 @@ object nivel1 inherits Niveles {
 	system.camino([c1,c2,c3,c4,c5,c6,c7,c8,c9,c10,c11,c12,c13,c14,c15,c16,c17])
 	}
 	
+	method limiteDeTurnos(){
+		return 38
+	}
+	
 	method spawnWave() {
 		var waveToSpawn = []
 		if (system.turn() == 1) {
@@ -208,6 +212,10 @@ object nivel2 inherits Niveles {
 		c17.agregarAPantalla()
 		system.camino([c1,c2,c3,c4,c5,c6,c7,c8,c9,c10,c11,c12,c13,c14,c15,c16,c17])
 	}
+	
+	method limiteDeTurnos(){
+		return 76
+	}
 		
 	method spawnWave() {
 	var waveToSpawn = []
@@ -274,22 +282,22 @@ object nivel3 inherits Niveles {
 		const c1 = new Camino(position = game.at(0,0))
 		const c2 = new Camino(position = game.at(0,1))
 		const c3 = new Camino(position = game.at(1,1))
-		const c4 = new Camino(position = game.at(1,2))
-		const c5 = new Camino(position = game.at(1,3))
-		const c6 = new Camino(position = game.at(1,4))
-		const c7 = new Camino(position = game.at(1,5))
-		const c8 = new Camino(position = game.at(1,6))
-		const c9 = new Camino(position = game.at(1,7))
-		const c10 = new Camino(position = game.at(2,7))
-		const c11 = new Camino(position = game.at(3,7))
-		const c12 = new Camino(position = game.at(4,7))
-		const c13 = new Camino(position = game.at(5,7))
-		const c14 = new Camino(position = game.at(5,6))
-		const c15 = new Camino(position = game.at(5,5))
-		const c16 = new Camino(position = game.at(5,4))
-		const c17 = new Camino(position = game.at(6,4))
+		const c4 = new Camino(position = game.at(2,1))
+		const c5 = new Camino(position = game.at(3,1))
+		const c6 = new Camino(position = game.at(4,1))
+		const c7 = new Camino(position = game.at(5,1))
+		const c8 = new Camino(position = game.at(5,2))
+		const c9 = new Camino(position = game.at(5,3))
+		const c10 = new Camino(position = game.at(5,4))
+		const c11 = new Camino(position = game.at(4,4))
+		const c12 = new Camino(position = game.at(4,5))
+		const c13 = new Camino(position = game.at(4,6))
+		const c14 = new Camino(position = game.at(4,7))
+		const c15 = new Camino(position = game.at(3,7))
+		const c16 = new Camino(position = game.at(2,7))
+		const c17 = new Camino(position = game.at(2,8))
 		cabezal.agregarAPantalla()
-		game.addVisualIn(jugador, game.at(7,4))
+		game.addVisualIn(jugador, game.at(2,9))
 		c1.agregarAPantalla()
 		c2.agregarAPantalla()
 		c3.agregarAPantalla()
@@ -309,11 +317,15 @@ object nivel3 inherits Niveles {
 		c17.agregarAPantalla()
 		system.camino([c1,c2,c3,c4,c5,c6,c7,c8,c9,c10,c11,c12,c13,c14,c15,c16,c17])
 	}
-		
+
+	method limiteDeTurnos(){
+		return 104
+	}
+	
 	method spawnWave() {
 	var waveToSpawn = []
 	if (system.turn() == 39) {
-		5.times( { n => waveToSpawn.add(self.inutilDeOtroMundo()) } )
+		5.times( { n => waveToSpawn.add(self.inutilNoMuerto()) } )
 	}
 	if (system.turn() == 43) {
 		7.times( { n => waveToSpawn.add(self.inutilDeOtroMundo()) } )
