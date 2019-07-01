@@ -127,7 +127,7 @@ class Mina inherits ObjetoEnPantalla {
 	method image() = "mina.png"
 	
 	method explotar() {
-		var enemigos = game.getObjectsIn (self.position())
+		var enemigos = game.colliders(self).filter( { obj => not obj.esCamino() } )
 		enemigos.forEach( { enemigo => enemigo.perderVida(atk) } )
 		self.quitarDePantalla()
 	}

@@ -63,10 +63,25 @@ program main {
 	keyboard.b().onPressDo( { system.torreBomba().construir() } ) 
 	keyboard.m().onPressDo( { system.mina().construir() } )
 	
-	game.whenCollideDo(cabezal, { torre => keyboard.i().onPressDo( { if (torre.esTorre()) { torre.cambiarPrioridad() } } ) })
-	game.whenCollideDo(cabezal, { torre => keyboard.v().onPressDo( { if (torre.esTorre()) { torre.vender() } } ) })
+	keyboard.v().onPressDo( { 
+		var colliders = game.colliders(cabezal).filter( { obj => obj.esTorre() } )
+		if (not colliders.isEmpty()) { colliders.head().vender() }
+	} )
+	
+	keyboard.i().onPressDo( { 
+		var colliders = game.colliders(cabezal).filter( { obj => obj.esTorre() } )
+		if (not colliders.isEmpty()) { colliders.head().cambiarPrioridad() }
+	} )
+	
+	//game.whenCollideDo(cabezal, { torre => keyboard.i().onPressDo( { if (torre.esTorre()) { torre.cambiarPrioridad() } } ) })
+	//game.whenCollideDo(cabezal, { torre => 
+	//	keyboard.v().onPressDo( { if (torre.esTorre() and not done) { 
+	//		torre.vender()
+	//		 = true
+	//	} } )
+	//})
 	/////////////////////Colision//////////
-	//game.whenCollideDo(mina, { enemigo => mina.explotar() } )
+	//game.whenCollideDo(enemigo, { mina => mina.explotar() } )
 	
 	game.start()
 }
