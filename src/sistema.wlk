@@ -39,9 +39,7 @@ object system {
 	
 	var property partidaContinua = true
 	
-	var property niveles = [nivel1, nivel2, nivel3]
-	
-	method nivelActual() = niveles.first()
+	method nivelActual() = nivel1
 	
 	method agregarT(torre) {
 		torres.add(torre)
@@ -69,9 +67,7 @@ object system {
 	
 	method nextTurn() {
 		turn = turn + 1
-		if (partidaContinua and turn == nivelActual.limite()) {
-			self.pasarDeNivel()
-		} else {
+		if (partidaContinua) {
 			self.avanzarTodos()
 			self.atacarTodas()
 			self.nivelActual().spawnWave()
@@ -84,10 +80,6 @@ object system {
 	
 	method atacarTodas() {
 		torres.forEach( { torre => torre.atacar() } )
-	}
-	method pasarDeNivel() {
-			niveles.remove(niveles.first())
-			self.nivelActual().crear()
 	}
 	
 	method ganar() {
@@ -103,13 +95,13 @@ object system {
 
 object pantallaDeDerrota inherits ObjetoEnPantalla {
 	
-	method image() = 0 //TODO: conseguir imagen
+	method image() = "youdied.jpg"
 	
 }
 
 object pantallaDeVictoria inherits ObjetoEnPantalla {
 	
-	method image() = 0 //TODO: conseguir imagen
+	method image() = 0 //TODO: conseguir imagen 
 	
 }
 
