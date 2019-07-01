@@ -7,7 +7,7 @@ import niveles.*
 
 program main {
 	
-	//Mapa del juego
+	//Mapa del juego.
 	
 	game.title("Tower Defense ReCrazy")
     game.height(11)
