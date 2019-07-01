@@ -212,7 +212,6 @@ object nivel1 inherits Niveles {
 		9.times( { n => waveToSpawn.add(self.inutilQueCorre()) } )
 	}
 	if (system.turn() == 67) {
-		13.times( { n => waveToSpawn.add(self.inutilDeOtroMundo()) } )
 		1.times( { n => waveToSpawn.add(self.dakhKnight()) } )
 	}
 	if (system.turn() == 68) {
