@@ -1,6 +1,8 @@
 import wollok.game.*
 import torres.*
 import enemigos.*
+import camino.*
+import niveles.*
 
 class ObjetoEnPantalla {
 	var property position = game.at(0,0)
@@ -37,6 +39,10 @@ object system {
 	
 	var property partidaContinua = true
 	
+	var property niveles = [nivel1]
+	
+	var property nivelActual = niveles.head()
+	
 	method agregarT(torre) {
 		torres.add(torre)
 	}
@@ -53,46 +59,6 @@ object system {
 		enemigos.remove(enemigo)
 	}
 	
-	method torreLenta() { //a.k.a La torre ballesta.
-		return new TorreBallesta (atk = 45, range = 4, pierce = 1, cost = 100)
-	}
-	
-	method torreRapida() { //a.k.a La torre gatling. Es obvio.
-		return new TorreGatling (atk = 15, range = 2, pierce = 6, cost = 180)
-	}
-	
-	method torreNormal() { //El cañonaso.
-		return new TorreCanion (atk = 21, range= 3, pierce= 3, cost = 150)
-	}
-	
-	method torreBomba() { //Boom.
-		return new TorreBomba (atk = 30, range = 2, pierce = 8, cost = 260)
-	}
-	
-	method mina() {
-		return new Mina()
-	}
-	
-	method inutilDeLaEspada() {
-		return new Incredibilis (atk = 5, vida = 50, recompenza = 80, speed = 2)
-	}
-	
-	method inutilDelHacha() {
-		return new Raider (atk = 15, vida = 125, recompenza = 120, speed = 1)
-	}
-	
-	method inutilQueCorre() {
-		return new Alien (atk = 10, vida = 30, recompenza = 120, speed = 4)
-	}
-	
-	method inutilQueBufea() {
-		return new Curandero (atk = 2, vida = 75, recompenza = 60, speed = 2)
-	}
-	
-	method shovelKnight() {
-		return new ShovelKnight (atk = 5, vida = 500, recompenza = 2000, speed = 1)
-	}
-	
 	method distanciaALaMeta() {
 		return camino.size()
 	}
@@ -103,53 +69,13 @@ object system {
 	
 	method nextTurn() {
 		turn = turn + 1
-		if (partidaContinua) {
+		if (partidaContinua and turn == 32) {
+			self.pasarDeNivel()
+		} else {
 			self.avanzarTodos()
 			self.atacarTodas()
-			self.spawnWave()
+			nivelActual.spawnWave()
 		}
-	}
-	
-	method spawnWave() {
-		var waveToSpawn = []
-		if (turn == 1) {
-			2.times( { n => waveToSpawn.add(self.inutilDeLaEspada()) } )
-		}
-		if (turn == 5) {
-			3.times( { n => waveToSpawn.add(self.inutilDeLaEspada()) } )
-			2.times( { n => waveToSpawn.add(self.inutilDelHacha()) } )
-			3.times( { n => waveToSpawn.add(self.inutilDeLaEspada()) } )
-		}
-		if (turn == 10) {
-			2.times( { n => waveToSpawn.add(self.inutilDeLaEspada()) } )
-			4.times( { n => waveToSpawn.add(self.inutilQueCorre()) } )
-			3.times( { n => waveToSpawn.add(self.inutilDelHacha()) } )
-			1.times( { n => waveToSpawn.add(self.inutilQueBufea()) } )
-		}
-		if (turn == 14) {
-			5.times( { n => waveToSpawn.add(self.inutilDelHacha()) } )
-			5.times( { n => waveToSpawn.add(self.inutilDeLaEspada()) } )
-		}
-		if (turn == 18) {
-			5.times( { n => waveToSpawn.add(self.inutilQueCorre()) } )
-			3.times( { n => waveToSpawn.add(self.inutilDelHacha()) } )
-		}
-		if (turn == 20) {
-			1.times( { n => waveToSpawn.add(self.shovelKnight()) } )
-			2.times( { n => waveToSpawn.add(self.inutilQueBufea()) } )
-		}
-		if (turn == 22) {
-			7.times( { n => waveToSpawn.add(self.inutilDeLaEspada()) } )
-			3.times( { n => waveToSpawn.add(self.inutilQueCorre()) } )
-		}
-		if (turn == 26) {
-			3.times( { n => waveToSpawn.add(self.inutilDeLaEspada()) } )
-			6.times( { n => waveToSpawn.add(self.inutilQueCorre()) } )
-		}
-		if (turn == 30) {
-			15.times( { n => waveToSpawn.add(self.inutilDeLaEspada()) } )
-		}
-		waveToSpawn.forEach( { enemy => enemy.engendrar() } )
 	}
 	
 	method avanzarTodos() {
@@ -158,6 +84,10 @@ object system {
 	
 	method atacarTodas() {
 		torres.forEach( { torre => torre.atacar() } )
+	}
+	method pasarDeNivel() {
+			niveles.remove(niveles.first())
+			nivelActual.crear()
 	}
 	
 	method ganar() {
@@ -187,7 +117,7 @@ object jugador {
 	var property oro = 500
 	var property hp  = 100
 	
-	method position() = game.at(7,8)
+	method position() = game.at(8,9)
 	
 	method image() = "player.png"
 	
@@ -210,12 +140,6 @@ object jugador {
 	method esCamino() {
 		return false
 	}
-}
-
-class Camino inherits ObjetoEnPantalla {
-	override method esCamino() { return true }
-	
-	method image() = "suelo1.png"
 }
 
 object cabezal inherits ObjetoEnPantalla {

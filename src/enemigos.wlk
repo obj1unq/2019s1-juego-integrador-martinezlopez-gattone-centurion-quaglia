@@ -1,5 +1,6 @@
 import sistema.*
 import wollok.game.*
+import camino.*
 
 class Enemy inherits ObjetoEnPantalla {
 	const property atk

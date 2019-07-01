@@ -1,5 +1,6 @@
 import sistema.*
 import wollok.game.*
+import camino.*
 
 class Torre inherits ObjetoEnPantalla {
 	

@@ -2,6 +2,7 @@ import wollok.game.*
 import sistema.*
 import torres.*
 import enemigos.*
+import camino.*
 
 
 test "test1" {

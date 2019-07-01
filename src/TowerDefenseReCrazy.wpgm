@@ -2,51 +2,17 @@ import wollok.game.*
 import sistema.*
 import torres.*
 import enemigos.*
+import camino.*
+import niveles.*
 
 program main {
 	
 	//Mapa del juego
 	
 	game.title("Tower Defense ReCrazy")
-    game.height(10)
-	game.width(10)
-	game.ground("fondo.png")//falta elegir las imagenes
-	
-	//Agregados a pantalla
-	
-	const c1 = new Camino(position = game.at(0,0))
-	const c2 = new Camino(position = game.at(0,1))
-	const c3 = new Camino(position = game.at(1,1))
-	const c4 = new Camino(position = game.at(1,2))
-	const c5 = new Camino(position = game.at(1,3))
-	const c6 = new Camino(position = game.at(2,3))
-	const c7 = new Camino(position = game.at(3,3))
-	const c8 = new Camino(position = game.at(4,3))
-	const c9 = new Camino(position = game.at(5,3))
-	const c10 = new Camino(position = game.at(5,4))
-	const c11 = new Camino(position = game.at(5,5))
-	const c12 = new Camino(position = game.at(5,6))
-	const c13 = new Camino(position = game.at(5,7))
-	const c14 = new Camino(position = game.at(6,7))
-	const c15 = new Camino(position = game.at(6,8))
-	cabezal.agregarAPantalla()
-	game.addVisual(jugador)
-	c1.agregarAPantalla()
-	c2.agregarAPantalla()
-	c3.agregarAPantalla()
-	c4.agregarAPantalla()
-	c5.agregarAPantalla()
-	c6.agregarAPantalla()
-	c7.agregarAPantalla()
-	c8.agregarAPantalla()
-	c9.agregarAPantalla()
-	c10.agregarAPantalla()
-	c11.agregarAPantalla()
-	c12.agregarAPantalla()
-	c13.agregarAPantalla()
-	c14.agregarAPantalla()
-	c15.agregarAPantalla()
-	system.camino([c1,c2,c3,c4,c5,c6,c7,c8,c9,c10,c11,c12,c13,c14,c15])
+    game.height(11)
+	game.width(11)
+	nivel1.crear()
 	//Movimiento del cabezal
 	
 	keyboard.up().onPressDo { cabezal.move(cabezal.position().up(1)) }
@@ -55,13 +21,13 @@ program main {
 	keyboard.right().onPressDo { cabezal.move(cabezal.position().right(1)) }
 	
 	//Teclas para jugar
-
+	
 	keyboard.space().onPressDo( { system.nextTurn() } )
-	keyboard.t().onPressDo( { system.torreLenta().construir() } )
-	keyboard.r().onPressDo( { system.torreRapida().construir() } )
-	keyboard.n().onPressDo( { system.torreNormal().construir() } ) 
-	keyboard.b().onPressDo( { system.torreBomba().construir() } ) 
-	keyboard.m().onPressDo( { system.mina().construir() } )
+	keyboard.t().onPressDo( { system.nivelActual().torreLenta().construir() } )
+	keyboard.r().onPressDo( { system.nivelActual().torreRapida().construir() } )
+	keyboard.n().onPressDo( { system.nivelActual().torreNormal().construir() } ) 
+	keyboard.b().onPressDo( { system.nivelActual().torreBomba().construir() } ) 
+	keyboard.m().onPressDo( { system.nivelActual().mina().construir() } )
 	
 	keyboard.v().onPressDo( { 
 		var colliders = game.colliders(cabezal).filter( { obj => obj.esTorre() } )
