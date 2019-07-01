@@ -39,9 +39,9 @@ object system {
 	
 	var property partidaContinua = true
 	
-	var property niveles = [nivel1]
+	var property niveles = [nivel1, nivel2]
 	
-	var property nivelActual = niveles.head()
+	method nivelActual() = niveles.first()
 	
 	method agregarT(torre) {
 		torres.add(torre)
@@ -69,12 +69,12 @@ object system {
 	
 	method nextTurn() {
 		turn = turn + 1
-		if (partidaContinua and turn == 32) {
+		if (partidaContinua and turn == 38) {
 			self.pasarDeNivel()
 		} else {
 			self.avanzarTodos()
 			self.atacarTodas()
-			nivelActual.spawnWave()
+			self.nivelActual().spawnWave()
 		}
 	}
 	
@@ -87,7 +87,8 @@ object system {
 	}
 	method pasarDeNivel() {
 			niveles.remove(niveles.first())
-			nivelActual.crear()
+			turn = 0
+			nivel2.crear()
 	}
 	
 	method ganar() {
@@ -116,8 +117,6 @@ object pantallaDeVictoria inherits ObjetoEnPantalla {
 object jugador {
 	var property oro = 500
 	var property hp  = 100
-	
-	method position() = game.at(8,9)
 	
 	method image() = "Player.png"
 	

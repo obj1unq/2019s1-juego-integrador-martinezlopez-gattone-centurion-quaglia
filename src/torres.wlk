@@ -78,7 +78,6 @@ class Torre inherits ObjetoEnPantalla {
 }
 
 class TorreCanion inherits Torre {
-	//La torre normal, basica, efectiva.
 	method image () = "torreCañon.png"
 }
 
@@ -89,13 +88,11 @@ class TorreShock inherits Torre {
 }
 
 class TorreBallesta inherits Torre {
-	//Te hunde el pecho. LITERAL.
 	method image () = "torreBallesta.png"
 }
 
 class TorreBomba inherits Torre {
 	var property aoeRange  = 2
-	//La hacemos explotar al colocarse o como lo hacemos?
 	method image () = "torreBomba.png"
 	
 	override method atacar() {
@@ -117,7 +114,6 @@ class TorreBomba inherits Torre {
 }
 
 class TorreGatling inherits Torre {
-	//RATATATATATATATATATATA!
 	method image () = "torreGatling.png"
 }
 

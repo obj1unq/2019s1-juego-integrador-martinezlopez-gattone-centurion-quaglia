@@ -35,13 +35,9 @@ class Enemy inherits ObjetoEnPantalla {
 		}
 	}
 	
-	//method ganarVida(cant) { //hice este metodo por si nos pinta hacer unidades enemigas que puedan curar
-	//	if (vida+cant >= maxHp) {
-	//		vida = maxHp
-	//	} else {
-	//		vida += cant
-	//	}
-	//}
+	method ganarVida(cant) { 
+		vida += cant
+	}
 
 	method avanzar() {
 		if((pos+speed) >= system.distanciaALaMeta()) { self.atacar() } 
@@ -51,38 +47,79 @@ class Enemy inherits ObjetoEnPantalla {
 					pos = pos + 1
 			} )
 		}
-		
-		
-		//if ((pos+speed) >= system.distanciaALaMeta()) {
-			//self.atacar()
-		//} else {
-			//self.position(system.camino().get(pos+speed).position())
-			//pos = pos + speed
-		//} 
 	}
 }
 
 class Raider inherits Enemy {
-	//Unidad enemiga estandar. Te mete el hacha por el or..
 	method image() = "enemigo1.png"
 }
 
-class Incredibilis inherits Enemy { //Lo siento chicos, pero ponerle este nombre fue algo que no pude evitar.
-	//Comandante enemigo, aumenta la moral (stat) de sus compañeros.
+class Incredibilis inherits Enemy { 
 	method image() = "enemigo2.png"
 }
 
-class Alien inherits Enemy {
-	//Unidad veloz pero con un daño minimo, pensada para asaltos rapidos.
+class AlienSith inherits Enemy {
 	method image() = "enemigo3.png"
 }
 
 class Curandero inherits Enemy {
-	//Unidad enemiga que cura, su daño para el player es infimo.
 	method image() = "enemigo4.png"
+		
+	override method avanzar(){
+		if((pos+speed) >= system.distanciaALaMeta()) { self.atacar() } 
+		else { 
+			new Range(1, speed).forEach( { n => 
+				self.position(system.camino().get(pos+1).position())
+					pos = pos + 1
+				self.ganarVida(15)
+			} )
+		}
+	}
 }
 
 class ShovelKnight inherits Enemy {
-	//Unidad de asalto pesado, lento en avance pero tiene mucho aguanta y un gran poder de ataque.
 	method image() = "enemigo5.png"
+}
+
+class Robot inherits Enemy {
+	method image() = "robot.png"
+}
+
+class Zombie inherits Enemy {
+	method image() = "zombie.png"
+}
+
+class AlienTrooper inherits Enemy {
+	method image() = "alienz.png"
+}
+
+class Alien inherits Enemy {
+	method image() = "alien.png"
+}
+
+class ZombieAxe inherits Enemy {
+	method image() = "zombie1.png"
+}
+
+class DarkLord inherits Enemy {
+	method image() = "Boss2.png"
+}
+
+class DeusVult inherits Enemy {
+	method image() = "Boss.png"
+	
+	override method avanzar(){
+		if((pos+speed) >= system.distanciaALaMeta()) { self.atacar() } 
+		else { 
+			new Range(1, speed).forEach( { n => 
+				self.position(system.camino().get(pos+1).position())
+					pos = pos + 1
+				self.ganarVida(50)
+			} )
+		}
+	}
+}
+
+class MadDog inherits Enemy {
+	method image() = "bosses.png"
 }
